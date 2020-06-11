@@ -1,4 +1,4 @@
-module tarefa/m
+module github.com/V-H-R-Oliveira/Sistemas-Distribuidos/trabalho-1
 
 go 1.14
 

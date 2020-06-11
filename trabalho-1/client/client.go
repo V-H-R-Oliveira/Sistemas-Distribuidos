@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/V-H-R-Oliveira/Sistemas-Distribuidos/trabalho-1/data"
 	"log"
 	"net"
-	"tarefa/m/data"
 )
 
 const serverEndpoint = "localhost:8080"

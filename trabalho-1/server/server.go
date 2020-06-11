@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net"
-	"tarefa/m/data"
 
+	"github.com/V-H-R-Oliveira/Sistemas-Distribuidos/trabalho-1/data"
 	"github.com/twinj/uuid"
 )
 
