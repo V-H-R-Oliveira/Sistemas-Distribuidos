@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"net"
@@ -16,7 +17,7 @@ type mapConn struct {
 	matricula data.Matricula
 }
 
-func acceptConnections(listener net.Listener, pool chan<- net.Conn, cancel <-chan struct{}) {
+func acceptConnections(ctx context.Context, listener net.Listener, pool chan<- net.Conn) {
 	for {
 		conn, err := listener.Accept()
 
@@ -29,13 +30,13 @@ func acceptConnections(listener net.Listener, pool chan<- net.Conn, cancel <-cha
 
 		select {
 		case pool <- conn:
-		case <-cancel:
+		case <-ctx.Done():
 			return
 		}
 	}
 }
 
-func recvData(conn net.Conn, recv chan<- mapConn, deadConns chan<- net.Conn, cancel <-chan struct{}) {
+func recvData(ctx context.Context, conn net.Conn, recv chan<- mapConn, deadConns chan<- net.Conn) {
 	reader := json.NewDecoder(conn)
 
 	for {
@@ -54,20 +55,15 @@ func recvData(conn net.Conn, recv chan<- mapConn, deadConns chan<- net.Conn, can
 
 	select {
 	case deadConns <- conn:
-	case <-cancel:
+	case <-ctx.Done():
 		return
 	}
 }
 
-func server(cancel <-chan struct{}) {
+func server(ctx context.Context) {
 	connPool := make(chan net.Conn)
-	defer close(connPool)
-
 	deadConnPool := make(chan net.Conn)
-	defer close(deadConnPool)
-
 	recv := make(chan mapConn)
-	defer close(recv)
 
 	listener, err := net.Listen("tcp", serverAddr)
 
@@ -77,12 +73,12 @@ func server(cancel <-chan struct{}) {
 
 	defer listener.Close()
 	log.Println("Server listening at", listener.Addr().String())
-	go acceptConnections(listener, connPool, cancel)
+	go acceptConnections(ctx, listener, connPool)
 
 	for {
 		select {
 		case conn := <-connPool:
-			go recvData(conn, recv, deadConnPool, cancel)
+			go recvData(ctx, conn, recv, deadConnPool)
 		case data := <-recv:
 			data.matricula.Ra = uuid.NewV4().String()
 			content, err := data.matricula.Serializar()
@@ -92,15 +88,14 @@ func server(cancel <-chan struct{}) {
 			}
 		case conn := <-deadConnPool:
 			log.Printf("Connection %s closed...\n", conn.RemoteAddr().String())
-		case <-cancel:
+		case <-ctx.Done():
 			return
 		}
 	}
 }
 
 func main() {
-	cancel := make(chan struct{})
-	defer close(cancel)
-
-	server(cancel)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	server(ctx)
 }

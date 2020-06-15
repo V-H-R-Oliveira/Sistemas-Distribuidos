@@ -1,16 +1,19 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/V-H-R-Oliveira/Sistemas-Distribuidos/trabalho-1/data"
 	"log"
 	"net"
+	"time"
+
+	"github.com/V-H-R-Oliveira/Sistemas-Distribuidos/trabalho-1/data"
 )
 
 const serverEndpoint = "localhost:8080"
 
-func sendPayload(conn net.Conn, payload []byte, recv chan<- data.Matricula, cancel <-chan struct{}) {
+func sendPayload(ctx context.Context, conn net.Conn, payload []byte, recv chan<- data.Matricula) {
 	conn.Write(payload)
 	reader := json.NewDecoder(conn)
 
@@ -19,19 +22,18 @@ func sendPayload(conn net.Conn, payload []byte, recv chan<- data.Matricula, canc
 		err := reader.Decode(&data)
 
 		if err != nil {
-			break
+			return
 		}
 
-		recv <- data
-	}
-
-	select {
-	case <-cancel:
-		return
+		select {
+		case recv <- data:
+		case <-ctx.Done():
+			return
+		}
 	}
 }
 
-func client(matricula *data.Matricula, cancel <-chan struct{}) {
+func client(ctx context.Context, matricula *data.Matricula) {
 	payload, err := matricula.Serializar()
 
 	if err != nil {
@@ -49,25 +51,25 @@ func client(matricula *data.Matricula, cancel <-chan struct{}) {
 
 	defer dial.Close()
 	log.Println("[*] Conectado com o endpoint", dial.RemoteAddr().String())
-	go sendPayload(dial, payload, recv, cancel)
+	go sendPayload(ctx, dial, payload, recv)
 
 	for {
 		select {
 		case data := <-recv:
 			fmt.Printf("(%s) - %s -> %s\n", data.Ra, data.Aluno.Curso, data.Aluno.Curso)
 			return
-		case <-cancel:
+		case <-ctx.Done():
 			return
 		}
 	}
 }
 
 func main() {
-	cancel := make(chan struct{})
-	defer close(cancel)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
 
 	aluno := data.CriarAluno("João", "Biologia")
 	matricula := data.CriarMatricula(aluno)
 
-	client(matricula, cancel)
+	client(ctx, matricula)
 }
