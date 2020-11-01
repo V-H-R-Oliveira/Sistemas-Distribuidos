@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="Trabalho Firebase" />
+    <meta
+      name="author"
+      content="Thiago Ribeiro, Vitor Oliveira, Willian Molina"
+    />
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+      as="style"
+    />
+    <link rel="preload" href="/static/main.js" as="script" />
+    <link
+      rel="preload"
+      href="https://use.fontawesome.com/releases/v5.14.0/js/all.js"
+      as="script"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="57x57"
+      href="/static/images/apple-icon-57x57.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="/static/images/apple-icon-60x60.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="/static/apple-icon-72x72.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="/static/apple-icon-76x76.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="/static/apple-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="/static/images/apple-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="/static/images/apple-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="/static/images/apple-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/static/images/apple-icon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/static/images/android-icon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/static/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/static/images/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/static/images/favicon-16x16.png"
+    />
+    <meta name="msapplication-TileColor" content="#363636" />
+    <meta
+      name="msapplication-TileImage"
+      content="/static/images/ms-icon-144x144.png"
+    />
+    <meta name="theme-color" content="#363636" />
+    <title>Trabalho Firebase</title>
+  </head>
+  <body>
+    <main>
+      <section>
+        <header>
+          <div
+            class="has-background-dark has-text-light has-text-weight-bold p-2"
+          >
+            <h1 class="is-size-2 is-size-3-mobile has-text-centered">
+              Trabalho Firabase
+            </h1>
+          </div>
+        </header>
+      </section>
+      <section>
+        <div class="mt-2 has-text-dark has-text-weight-bold">
+          <h3 class="has-text-centered is-size-3 is-size-4-mobile">
+            Cadastre um bloco
+          </h3>
+        </div>
+        <div>
+          <form id="firebase-form">
+            <div class="field">
+              <label class="label" for="block-name">Nome do Bloco</label>
+              <div class="control has-icons-left has-icons-right">
+                <input
+                  class="input is-dark"
+                  type="text"
+                  id="block-name"
+                  placeholder="Nome do bloco..."
+                  required
+                />
+                <span class="icon is-small is-left">
+                  <i class="has-text-dark fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field is-grouped">
+              <div class="control" style="display: block; margin: 0 auto">
+                <button class="button is-medium is-dark is-outlined">
+                  <span class="icon">
+                    <i class="fa fa-save"></i>
+                  </span>
+                  <span>Cadastrar bloco</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"
+    ></script>
+    <script defer src="/static/main.js"></script>
+  </body>
+</html>
