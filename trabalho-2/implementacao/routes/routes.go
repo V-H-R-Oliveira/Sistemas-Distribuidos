@@ -6,8 +6,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"trabalho-2/m/database"
-	"trabalho-2/m/model"
+	"trabalho-firebase/m/database"
+	"trabalho-firebase/m/model"
 
 	"cloud.google.com/go/firestore"
 )
@@ -21,19 +21,29 @@ func enableCORS(rw *http.ResponseWriter, r *http.Request) {
 }
 
 // IndexRoute -> Index route
-func IndexRoute(rw http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(rw,
-			"This route only accept Get requests.", http.StatusMethodNotAllowed)
-		return
-	}
+func IndexRoute(ctx context.Context, client *firestore.Client) http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(rw,
+				"This route only accept Get requests.", http.StatusMethodNotAllowed)
+			return
+		}
 
-	if err := template.Must(
-		template.ParseFiles("templates/index.html")).Execute(rw, nil); err != nil {
-		log.Println(err)
-		http.Error(rw,
-			"Could not render the index page.", http.StatusInternalServerError)
-		return
+		tmplData, err := database.GetBlocks(ctx, client, model.Collection)
+
+		if err != nil {
+			log.Println(err)
+			http.Error(rw, "Could not retrieve the collection data.", http.StatusInternalServerError)
+			return
+		}
+
+		if err := template.Must(
+			template.ParseFiles("templates/index.html")).Execute(rw, tmplData); err != nil {
+			log.Println(err)
+			http.Error(rw,
+				"Could not render the index page.", http.StatusInternalServerError)
+			return
+		}
 	}
 }
 

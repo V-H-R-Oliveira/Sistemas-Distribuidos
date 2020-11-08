@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"trabalho-2/m/routes"
+	"trabalho-firebase/m/routes"
 
 	"cloud.google.com/go/firestore"
 )
@@ -30,9 +30,9 @@ func main() {
 	fs := http.FileServer(http.Dir("static"))
 
 	router.Handle("/static/", http.StripPrefix("/static", fs))
-	router.HandleFunc("/", routes.IndexRoute)
+	router.HandleFunc("/", routes.IndexRoute(ctx, client))
 	router.HandleFunc("/add-block", routes.AddBlockRoute(ctx, client))
 
-	log.Println("running...")
+	log.Printf("running at port %s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }

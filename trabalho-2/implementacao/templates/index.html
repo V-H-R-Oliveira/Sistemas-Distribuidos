@@ -99,6 +99,10 @@
       content="/static/images/ms-icon-144x144.png"
     />
     <meta name="theme-color" content="#363636" />
+    <script
+      async
+      src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"
+    ></script>
     <title>Trabalho Firebase</title>
   </head>
   <body>
@@ -150,11 +154,32 @@
           </form>
         </div>
       </section>
+      <h2 class="mt-5 has-text-centered has-text-weight-bold is-size-3">
+        Blocos cadastrados:
+      </h3>
+      <section class="mt-5">
+        {{range .Docs}}
+        <div class="card has-text-centered my-5" style="border: 1px solid black;">
+          <div>
+            <p class="has-text-centered">ID do bloco: <span>{{.ID}}</span></p>
+          </div>
+          <div class="card-content">
+            <div class="content">
+              Nome do bloco: <span>{{.Name}}</span>
+              <br />
+              <hr />
+              <time datetime="{{.Timestamp}}">{{.Timestamp}}</time>
+              <br />
+              <hr />
+              Antecessor: <span>{{if .Parent}}{{.Parent}}{{else}}Não possui antecessor{{end}}</span>
+            </div>
+          </div>
+        </div>
+        {{else}}
+        <p>A coleção não possui documentos.</p>
+        {{end}}
+      </section>
     </main>
-    <script
-      defer
-      src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"
-    ></script>
     <script defer src="/static/main.js"></script>
   </body>
 </html>

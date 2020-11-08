@@ -32,6 +32,18 @@ type ConcurrentBlock struct {
 	Mu    *sync.RWMutex
 }
 
+// TemplateData -> Data structure for go templating.
+type TemplateData struct {
+	Docs []*Block
+}
+
+// NewTemplateData -> Creates a new TemplateData.
+func NewTemplateData(docs []*Block) *TemplateData {
+	return &TemplateData{
+		Docs: docs,
+	}
+}
+
 // NewBlock -> Creates a new Block.
 func NewBlock() *Block {
 	return &Block{
