@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"sort"
-	"trabalho-firebase/m/model"
+	"trabalho-2/m/model"
 
 	"cloud.google.com/go/firestore"
 )

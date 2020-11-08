@@ -6,8 +6,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"trabalho-firebase/m/database"
-	"trabalho-firebase/m/model"
+	"trabalho-2/m/database"
+	"trabalho-2/m/model"
 
 	"cloud.google.com/go/firestore"
 )
